@@ -28,6 +28,7 @@ import (
 
 type VerifyNpmPackageCommand struct {
 	AttestationsPath    string
+	VerifierName        string
 	BuilderID           *string
 	SourceURI           string
 	SourceBranch        *string
@@ -68,6 +69,10 @@ func (c *VerifyNpmPackageCommand) Exec(ctx context.Context, tarballs []string) (
 			ExpectedPackageVersion: c.PackageVersion,
 		}
 
+		verifierOpts := &options.VerifierOpts{
+			Name: c.VerifierName,
+		}
+
 		builderOpts := &options.BuilderOpts{
 			ExpectedID: c.BuilderID,
 		}
@@ -78,7 +83,7 @@ func (c *VerifyNpmPackageCommand) Exec(ctx context.Context, tarballs []string) (
 			return nil, err
 		}
 
-		verifiedProvenance, outBuilderID, err := verifiers.VerifyNpmPackage(ctx, attestations, tarballHash, provenanceOpts, builderOpts)
+		verifiedProvenance, outBuilderID, err := verifiers.VerifyNpmPackage(ctx, attestations, tarballHash, provenanceOpts, verifierOpts, builderOpts)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "Verifying npm package %s: FAILED: %v\n\n", tarball, err)
 			return nil, err

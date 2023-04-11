@@ -31,6 +31,7 @@ type ComputeDigestFn func(string) (string, error)
 type VerifyImageCommand struct {
 	// May be nil if supplied alongside in the registry
 	ProvenancePath      *string
+	VerifierName        string
 	BuilderID           *string
 	SourceURI           string
 	SourceBranch        *string
@@ -58,6 +59,10 @@ func (c *VerifyImageCommand) Exec(ctx context.Context, artifacts []string) (*uti
 		ExpectedWorkflowInputs: c.BuildWorkflowInputs,
 	}
 
+	verifierOpts := &options.VerifierOpts{
+		Name: c.VerifierName,
+	}
+
 	builderOpts := &options.BuilderOpts{
 		ExpectedID: c.BuilderID,
 	}
@@ -70,7 +75,7 @@ func (c *VerifyImageCommand) Exec(ctx context.Context, artifacts []string) (*uti
 		}
 	}
 
-	verifiedProvenance, outBuilderID, err := verifiers.VerifyImage(ctx, artifacts[0], provenance, provenanceOpts, builderOpts)
+	verifiedProvenance, outBuilderID, err := verifiers.VerifyImage(ctx, artifacts[0], provenance, provenanceOpts, verifierOpts, builderOpts)
 	if err != nil {
 		return nil, err
 	}

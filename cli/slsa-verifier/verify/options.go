@@ -38,6 +38,7 @@ type VerifyOptions struct {
 	BuildWorkflowInputs workflowInputs
 	BuilderID           string
 	/* Other */
+	VerifierName    string
 	ProvenancePath  string
 	PrintProvenance bool
 }
@@ -64,6 +65,8 @@ func (o *VerifyOptions) AddFlags(cmd *cobra.Command) {
 		"[optional] expected version the binary was compiled from. Uses semantic version to match the tag")
 
 	/* Other options */
+	cmd.Flags().StringVar(&o.VerifierName, "verifier-name", "", "[optional] name of the verifier to use")
+
 	cmd.Flags().StringVar(&o.ProvenancePath, "provenance-path", "",
 		"path to a provenance file")
 

@@ -28,6 +28,7 @@ import (
 // Note: nil branch, tag, version-tag and builder-id means we ignore them during verification.
 type VerifyArtifactCommand struct {
 	ProvenancePath      string
+	VerifierName        string
 	BuilderID           *string
 	SourceURI           string
 	SourceBranch        *string
@@ -56,6 +57,10 @@ func (c *VerifyArtifactCommand) Exec(ctx context.Context, artifacts []string) (*
 			ExpectedWorkflowInputs: c.BuildWorkflowInputs,
 		}
 
+		verifierOpts := &options.VerifierOpts{
+			Name: c.VerifierName,
+		}
+
 		builderOpts := &options.BuilderOpts{
 			ExpectedID: c.BuilderID,
 		}
@@ -66,7 +71,7 @@ func (c *VerifyArtifactCommand) Exec(ctx context.Context, artifacts []string) (*
 			return nil, err
 		}
 
-		verifiedProvenance, outBuilderID, err := verifiers.VerifyArtifact(ctx, provenance, artifactHash, provenanceOpts, builderOpts)
+		verifiedProvenance, outBuilderID, err := verifiers.VerifyArtifact(ctx, provenance, artifactHash, provenanceOpts, verifierOpts, builderOpts)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "Verifying artifact %s: FAILED: %v\n\n", artifact, err)
 			return nil, err

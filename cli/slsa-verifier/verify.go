@@ -46,6 +46,7 @@ func verifyArtifactCmd() *cobra.Command {
 				SourceURI:           o.SourceURI,
 				PrintProvenance:     o.PrintProvenance,
 				BuildWorkflowInputs: o.BuildWorkflowInputs.AsMap(),
+				VerifierName:        o.VerifierName,
 			}
 			if cmd.Flags().Changed("source-branch") {
 				v.SourceBranch = &o.SourceBranch

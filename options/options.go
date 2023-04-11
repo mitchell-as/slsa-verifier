@@ -29,6 +29,11 @@ type ProvenanceOpts struct {
 	ExpectedPackageVersion *string
 }
 
+// VerifierOpts are the options for the verifier to use. (The default is GHA.)
+type VerifierOpts struct {
+	Name string
+}
+
 // BuildOpts are the options for checking the builder.
 type BuilderOpts struct {
 	// ExpectedID is the expected builder ID.
